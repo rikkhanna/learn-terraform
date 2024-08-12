@@ -1,0 +1,27 @@
+name: Terraform Docker Image
+
+on:
+  push:
+    paths:
+      - 'Dockerfile'
+
+env:
+  IMAGE_NAME: rish-dev/infrastructure/infra-init
+  REGISTRY_HOSTNAME: us-central1-docker.pkg.dev
+
+jobs:
+  build-and-push-image:
+    name: Build and Push Infra Image
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Authenticate with GCP
+        uses: 'google-github-actions/auth@v2'
+        with:
+          project_id: 'rish-dev'
+          token_format: "access_token"
+          service_account: 'depoyer@rish-dev.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/github/providers/my-repo'
+  

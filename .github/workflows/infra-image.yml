@@ -16,8 +16,8 @@ jobs:
     name: Build and Push Infra Image
     runs-on: ubuntu-latest
     permissions:
-      id-token: write  # Allows GitHub Actions to request an OIDC token
-      contents: read   # Allows reading from repository
+      contents: 'read'
+      id-token: 'write'
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -27,7 +27,7 @@ jobs:
         with:
           project_id: 'rish-dev'
           token_format: "access_token"
-        #   service_account: 'depoyer@rish-dev.iam.gserviceaccount.com'
+          service_account: 'depoyer@rish-dev.iam.gserviceaccount.com'
           workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/github/providers/my-repo'
   
       - name: Set up Cloud SDK

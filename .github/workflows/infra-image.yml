@@ -13,6 +13,9 @@ jobs:
   build-and-push-image:
     name: Build and Push Infra Image
     runs-on: ubuntu-latest
+    permissions:
+      id-token: write  # Allows GitHub Actions to request an OIDC token
+      contents: read   # Allows reading from repository
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4

@@ -25,3 +25,17 @@ jobs:
           service_account: 'depoyer@rish-dev.iam.gserviceaccount.com'
           workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/github/providers/my-repo'
   
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+          skip_install: true
+  
+      - name: Authenticate GCR
+        run: |
+            gcloud info
+            gcloud auth configure-docker "$REGISTRY_HOSTNAME" --quiet
+  
+      - name: Build and Push Infra Init Docker Image
+        run: |
+            docker build -t "$REGISTRY_HOSTNAME/$IMAGE_NAME:latest" .
+            docker push "$REGISTRY_HOSTNAME/$IMAGE_NAME:latest"

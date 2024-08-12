@@ -44,4 +44,3 @@ jobs:
         run: |
             docker build -t "$REGISTRY_HOSTNAME/$IMAGE_NAME:latest" .
             docker push "$REGISTRY_HOSTNAME/$IMAGE_NAME:latest"
-        

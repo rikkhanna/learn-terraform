@@ -26,9 +26,9 @@ jobs:
         uses: 'google-github-actions/auth@v2'
         with:
           project_id: 'rish-dev'
-        #   token_format: "access_token"
-        #   service_account: 'depoyer@rish-dev.iam.gserviceaccount.com'
-          workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/github/providers/my-repo'
+          token_format: "access_token"
+          service_account: 'my-service-account@rish-dev.iam.gserviceaccount.com'
+          workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/gitcheck/providers/my-gh-repo'
   
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1

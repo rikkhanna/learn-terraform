@@ -8,9 +8,9 @@ name: Terraform Docker Image
 on: [push]
 
 env:
-  IMAGE_NAME: rish-dev/infrastructure
+  IMAGE_NAME: rish-dev/infrastructure/infra-init
   REGISTRY_HOSTNAME: us-central1-docker.pkg.dev
-# us-central1-docker.pkg.dev/rish-dev/infrastructure
+
 jobs:
   build-and-push-image:
     name: Build and Push Infra Image
@@ -44,4 +44,4 @@ jobs:
         run: |
             docker build -t "$REGISTRY_HOSTNAME/$IMAGE_NAME:latest" .
             docker push "$REGISTRY_HOSTNAME/$IMAGE_NAME:latest"
-        
+    

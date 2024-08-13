@@ -8,9 +8,9 @@ name: Terraform Docker Image
 on: [push]
 
 env:
-  IMAGE_NAME: rish-dev/infrastructure/infra-init
+  IMAGE_NAME: rish-dev/infrastructure
   REGISTRY_HOSTNAME: us-central1-docker.pkg.dev
-
+# us-central1-docker.pkg.dev/rish-dev/infrastructure
 jobs:
   build-and-push-image:
     name: Build and Push Infra Image

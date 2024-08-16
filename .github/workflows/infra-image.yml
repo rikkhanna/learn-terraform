@@ -1,11 +1,11 @@
 name: Terraform Docker Image
 
-# on:
-#   push:
-#     paths:
-#       - 'Dockerfile'
+on:
+  push:
+    paths:
+      - 'Dockerfile'
 
-on: [push]
+# on: [push]
 
 env:
   IMAGE_NAME: rish-dev/infrastructure/infra-init

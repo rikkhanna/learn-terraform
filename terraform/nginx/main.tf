@@ -38,3 +38,54 @@ resource "google_compute_firewall" "default" {
   }
   source_ranges = ["0.0.0.0/0"]
 }
+
+# locals {
+#   ansible_play = file("${path.module}/playbook.yml")
+# }
+
+resource "google_compute_instance" "nginx" {
+  name         = "nginx-vm"
+  machine_type = "e2-micro"
+
+  tags = ["nginx"]
+
+  boot_disk {
+    initialize_params {
+      image = "projects/debian-cloud/global/images/family/debian-10"
+    }
+  }
+
+  network_interface {
+    network    = google_compute_network.vpc_network.id
+    subnetwork = google_compute_subnetwork.subnet.id
+  }
+
+#   metadata = {
+#     enable-oslogin         = "True"
+#     ansible_play             = local.ansible_play
+#   }
+
+#   metadata_startup_script = <<-EOT
+#     #!/bin/bash
+#     set -x
+#     curl -s http://metadata.google.internal/computeMetadata/v1/instance/attributes/ansible_play -H 'Metadata-Flavor: Google' > /tmp/ansible_play.yml
+#   EOT
+
+#   attached_disk {
+#     device_name = "persistent-disk-1"
+#     mode        = "READ_WRITE"
+#     source      = google_compute_disk.data_disk.id
+#   }
+
+#   lifecycle {
+#     ignore_changes = [
+#       metadata_startup_script,
+#       metadata["ssh-keys"],
+#       metadata["enable-oslogin"],
+#     ]
+#   }
+
+  provisioner "local-exec" {
+    command = "ansible-playbook  -i ${self.network_interface[0].access_config[0].nat_ip},  playbook.yml"
+  }
+}

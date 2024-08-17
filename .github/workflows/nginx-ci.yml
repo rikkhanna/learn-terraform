@@ -1,0 +1,46 @@
+name: 'Terraform nginx'
+
+on:
+  workflow_dispatch:
+
+jobs:
+  terraform:
+    name: 'Terraform'
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform/nginx
+    permissions:
+        contents: 'read'
+        id-token: 'write'
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Authenticate with GCP
+        uses: 'google-github-actions/auth@v2'
+        with:
+            project_id: 'rish-dev'
+            token_format: "access_token"
+            service_account: 'my-service-account@rish-dev.iam.gserviceaccount.com'
+            workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/gitcheck/providers/my-gh-repo'
+    
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+        with:
+            skip_install: true
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+
+      - name: Terraform Format
+        id: format
+        run: terraform fmt -check
+
+      - name: Terraform Init
+        id: init
+        run: terraform init
+
+      - name: Terraform Validate
+        id: validate
+        run: terraform validate -no-color

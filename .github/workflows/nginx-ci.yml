@@ -46,6 +46,8 @@ jobs:
         run: terraform validate -no-color
 
       - name: Terraform Apply
+        env:
+          TF_VAR_ANSIBLE_KEY: ${{ secrets.ANSIBLE_KEY }}
         run: terraform apply -auto-approve
 
   destroy:

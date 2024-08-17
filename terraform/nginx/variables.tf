@@ -23,3 +23,7 @@ variable "region" {
   type    = string
   default = "us-central1"
 }
+
+variable "ansible_key" {
+  default = null
+}

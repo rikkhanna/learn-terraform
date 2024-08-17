@@ -1,0 +1,2 @@
+[webservers]
+34.29.56.23 ansible_user=ansible

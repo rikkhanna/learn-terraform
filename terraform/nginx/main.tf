@@ -39,9 +39,9 @@ resource "google_compute_firewall" "default" {
   source_ranges = ["0.0.0.0/0"]
 }
 
-# locals {
-#   ansible_play = file("${path.module}/playbook.yml")
-# }
+locals {
+  ssh_user = "ansible"
+}
 
 resource "google_compute_instance" "nginx" {
   name         = "nginx-vm"
@@ -87,6 +87,19 @@ resource "google_compute_instance" "nginx" {
 #       metadata["enable-oslogin"],
 #     ]
 #   }
+
+
+
+    provisioner "remote-exec" {
+    inline = ["echo 'Wait until SSH is ready'"]
+
+    connection {
+      type        = "ssh"
+      user        = local.ssh_user
+      private_key = file("ansible-key")
+      host        = self.network_interface.0.access_config.0.nat_ip
+    }
+  }
 
   provisioner "local-exec" {
     command = "ansible-playbook  -i ${self.network_interface[0].access_config[0].nat_ip}, --private-key ansible-key  playbook.yml"

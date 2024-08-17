@@ -55,6 +55,16 @@ jobs:
         working-directory: ./terraform/nginx
     environment: manual_trigger
     steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v4
+
+      - name: Authenticate with GCP
+        uses: 'google-github-actions/auth@v2'
+        with:
+            project_id: 'rish-dev'
+            token_format: "access_token"
+            service_account: 'my-service-account@rish-dev.iam.gserviceaccount.com'
+            workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/gitcheck/providers/my-gh-repo'
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
       - name: Terraform Destroy

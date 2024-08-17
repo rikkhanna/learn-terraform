@@ -49,8 +49,10 @@ jobs:
           cat << EOF > ansible-key
           ${{ secrets.ANSIBLE_KEY }}
           EOF
+      - name: Print key
+        run: cat ansible-key
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var "ansible_key=ansible-key"
+        run: terraform apply -auto-approve
 
   destroy:
     runs-on: ubuntu-latest

@@ -89,6 +89,6 @@ resource "google_compute_instance" "nginx" {
 #   }
 
   provisioner "local-exec" {
-    command = "ansible-playbook  -i ${self.network_interface[0].access_config[0].nat_ip}, --private-key ${var.ansible_key}  playbook.yml"
+    command = "ansible-playbook  -i ${self.network_interface[0].access_config[0].nat_ip}, --private-key ansible-key  playbook.yml"
   }
 }

@@ -1,3 +1,11 @@
+terraform  {
+
+ backend "gcs" {
+    bucket  = "terraform-state-bucket-rick"
+    prefix = "nginx"
+  }
+}
+
 provider "google" {
   project = "rish-dev"
   region  = "us-central1"

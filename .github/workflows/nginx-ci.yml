@@ -50,6 +50,9 @@ jobs:
 
   destroy:
     runs-on: ubuntu-latest
+    permissions:
+        contents: 'read'
+        id-token: 'write'
     defaults:
       run:
         working-directory: ./terraform/nginx
@@ -67,5 +70,8 @@ jobs:
             workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/gitcheck/providers/my-gh-repo'
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v2
+      - name: Terraform Init
+        id: init
+        run: terraform init
       - name: Terraform Destroy
         run: terraform destroy -auto-approve

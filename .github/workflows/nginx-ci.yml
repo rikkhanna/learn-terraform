@@ -47,37 +47,37 @@ jobs:
       -  name: Write secret to file
          run: |
           cat << EOF > ansible-key
-          ${{ secrets.ANSIBLE_KEY }}
+          ${{ vars.ANSIBLE_KEY_PLAN }}
           EOF
       - name: Print key
         run: cat ansible-key
-      - name: Terraform Apply
-        run: terraform apply -auto-approve
+#       - name: Terraform Apply
+#         run: terraform apply -auto-approve
 
-  destroy:
-    runs-on: ubuntu-latest
-    permissions:
-        contents: 'read'
-        id-token: 'write'
-    defaults:
-      run:
-        working-directory: ./terraform/nginx
-    environment: manual_trigger
-    steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+#   destroy:
+#     runs-on: ubuntu-latest
+#     permissions:
+#         contents: 'read'
+#         id-token: 'write'
+#     defaults:
+#       run:
+#         working-directory: ./terraform/nginx
+#     environment: manual_trigger
+#     steps:
+#       - name: Checkout Repo
+#         uses: actions/checkout@v4
 
-      - name: Authenticate with GCP
-        uses: 'google-github-actions/auth@v2'
-        with:
-            project_id: 'rish-dev'
-            token_format: "access_token"
-            service_account: 'my-service-account@rish-dev.iam.gserviceaccount.com'
-            workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/gitcheck/providers/my-gh-repo'
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v2
-      - name: Terraform Init
-        id: init
-        run: terraform init
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
+#       - name: Authenticate with GCP
+#         uses: 'google-github-actions/auth@v2'
+#         with:
+#             project_id: 'rish-dev'
+#             token_format: "access_token"
+#             service_account: 'my-service-account@rish-dev.iam.gserviceaccount.com'
+#             workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/gitcheck/providers/my-gh-repo'
+#       - name: Setup Terraform
+#         uses: hashicorp/setup-terraform@v2
+#       - name: Terraform Init
+#         id: init
+#         run: terraform init
+#       - name: Terraform Destroy
+#         run: terraform destroy -auto-approve

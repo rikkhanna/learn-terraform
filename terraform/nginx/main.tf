@@ -1,11 +1,11 @@
 provider "google" {
   project = "rish-dev"
   region  = "us-central1"
-  zone = "us-central1-c"
+  zone    = "us-central1-c"
 }
 
 resource "google_compute_network" "vpc_network" {
-  name = var.network_name
+  name                    = var.network_name
   auto_create_subnetworks = var.auto_create_subnetworks
 }
 

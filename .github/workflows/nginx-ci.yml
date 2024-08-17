@@ -44,9 +44,13 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-
+      -  name: Write secret to file
+         run: |
+          cat << EOF > ansible-key
+          ${{ secrets.ANSIBLE_KEY }}
+          EOF
       - name: Terraform Apply
-        run: terraform apply -auto-approve -var "ansible_key=${{ secrets.ANSIBLE_KEY }}"
+        run: terraform apply -auto-approve -var "ansible_key=ansible-key"
 
   destroy:
     runs-on: ubuntu-latest

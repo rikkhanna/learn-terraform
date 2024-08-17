@@ -51,6 +51,9 @@ jobs:
           EOF
       - name: Print key
         run: cat ansible-key
+    
+      - name: change permission for key
+        run: chmod 0600 ansible-key
         
       - name: Terraform Apply
         run: terraform apply -auto-approve

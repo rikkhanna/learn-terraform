@@ -51,7 +51,7 @@ resource "google_compute_instance" "nginx" {
 
   boot_disk {
     initialize_params {
-      image = "projects/debian-cloud/global/images/family/debian-10"
+      image = "debian-cloud/debian-11"
     }
   }
 

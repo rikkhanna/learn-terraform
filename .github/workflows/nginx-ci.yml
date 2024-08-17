@@ -44,3 +44,18 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve
+
+  destroy:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./terraform/nginx
+    environment: manual_trigger
+    steps:
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v2
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve

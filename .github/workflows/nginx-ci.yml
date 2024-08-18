@@ -58,6 +58,44 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
 
+      - name: Extract VM ip
+        run: |
+          IP=grep -Eo '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' inventory
+          echo "host_ip=${IP}" >> $GITHUB_ENV
+          echo "Extracted IP: ${host_ip}"
+      - name: Copy folder to remote server
+        uses: appleboy/scp-action@v0.1.7
+        with:
+            host: ${{ env.host_ip }}
+            username: ansible
+            key: ${{ secrets.ANSIBLE_KEY }}
+            port: 22
+            source: ./terraform/nginx
+            target: /tmp/nginx
+            timeout: 30s
+            command_timeout: 10m
+            use_insecure_cipher: false
+            rm: false
+            debug: false
+            strip_components: 0
+            overwrite: false
+            tar_dereference: false
+            tar_exec: tar
+            proxy_port: 22
+            proxy_timeout: 30s
+            proxy_use_insecure_cipher: false
+      - name: executing remote ssh commands using key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+              host: ${{ env.host_ip }}
+              username: ansible
+              key: ${{ secrets.ANSIBLE_KEY }}
+              port: 22
+              script: |
+                cd /tmp/nginx/terraform/nginx
+                sudo apt-get install -y ansible
+                ansible-playbook playbook.yml
+
   destroy:
     runs-on: ubuntu-latest
     permissions:

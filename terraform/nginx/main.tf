@@ -102,15 +102,15 @@ resource "local_file" "ansible-inventory" {
 }
 
 # Provisioner to run Ansible playbook
-resource "null_resource" "ansible_provision" {
-  # This depends on the VM creation and file rendering
-  depends_on = [
-    google_compute_instance.nginx,
-    local_file.ansible-inventory
-  ]
+# resource "null_resource" "ansible_provision" {
+#   # This depends on the VM creation and file rendering
+#   depends_on = [
+#     google_compute_instance.nginx,
+#     local_file.ansible-inventory
+#   ]
 
-  provisioner "local-exec" {
-    # command = "ansible-playbook -i inventory --private-key ansible-key playbook.yml"
-    command = "ssh -i ansible-key -o StrictHostKeyChecking=no ansible@${google_compute_instance.nginx.network_interface[0].access_config[0].nat_ip} 'echo SSH works'"
-  }
-}
+#   provisioner "local-exec" {
+#     # command = "ansible-playbook -i inventory --private-key ansible-key playbook.yml"
+#     command = "ssh -i ansible-key -o StrictHostKeyChecking=no ansible@${google_compute_instance.nginx.network_interface[0].access_config[0].nat_ip} 'echo SSH works'"
+#   }
+# }

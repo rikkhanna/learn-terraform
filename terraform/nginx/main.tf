@@ -1,7 +1,7 @@
-terraform  {
+terraform {
 
- backend "gcs" {
-    bucket  = "terraform-state-bucket-rick"
+  backend "gcs" {
+    bucket = "terraform-state-bucket-rick"
     prefix = "nginx"
   }
 }
@@ -63,45 +63,53 @@ resource "google_compute_instance" "nginx" {
     }
   }
 
-#   metadata = {
-#     enable-oslogin         = "True"
-#     ansible_play             = local.ansible_play
-#   }
+  #   metadata = {
+  #     enable-oslogin         = "True"
+  #     ansible_play             = local.ansible_play
+  #   }
 
-#   metadata_startup_script = <<-EOT
-#     #!/bin/bash
-#     set -x
-#     curl -s http://metadata.google.internal/computeMetadata/v1/instance/attributes/ansible_play -H 'Metadata-Flavor: Google' > /tmp/ansible_play.yml
-#   EOT
+  #   metadata_startup_script = <<-EOT
+  #     #!/bin/bash
+  #     set -x
+  #     curl -s http://metadata.google.internal/computeMetadata/v1/instance/attributes/ansible_play -H 'Metadata-Flavor: Google' > /tmp/ansible_play.yml
+  #   EOT
 
-#   attached_disk {
-#     device_name = "persistent-disk-1"
-#     mode        = "READ_WRITE"
-#     source      = google_compute_disk.data_disk.id
-#   }
+  #   attached_disk {
+  #     device_name = "persistent-disk-1"
+  #     mode        = "READ_WRITE"
+  #     source      = google_compute_disk.data_disk.id
+  #   }
 
-#   lifecycle {
-#     ignore_changes = [
-#       metadata_startup_script,
-#       metadata["ssh-keys"],
-#       metadata["enable-oslogin"],
-#     ]
-#   }
+  #   lifecycle {
+  #     ignore_changes = [
+  #       metadata_startup_script,
+  #       metadata["ssh-keys"],
+  #       metadata["enable-oslogin"],
+  #     ]
+  #   }
 
 
+}
 
-    provisioner "remote-exec" {
-    inline = ["echo 'Wait until SSH is ready'"]
-
-    connection {
-      type        = "ssh"
-      user        = local.ssh_user
-      private_key = file("ansible-key")
-      host        = self.network_interface.0.access_config.0.nat_ip
+resource "local_file" "ansible-inventory" {
+  depends_on = [google_compute_instance.nginx]
+  content = templatefile("${path.cwd}/inventory.tpl",
+    {
+      public_ip = google_compute_instance.nginx.network_interface[0].access_config[0].nat_ip
     }
-  }
+  )
+  filename = "${path.cwd}/inventory"
+}
+
+# Provisioner to run Ansible playbook
+resource "null_resource" "ansible_provision" {
+  # This depends on the VM creation and file rendering
+  depends_on = [
+    google_compute_instance.nginx,
+    local_file.ansible-inventory
+  ]
 
   provisioner "local-exec" {
-    command = "ansible-playbook  -i ${self.network_interface[0].access_config[0].nat_ip}, -u ansible --private-key ansible-key  playbook.yml"
+    command = "ansible-playbook -i inventory --private-key ansible-key playbook.yml"
   }
 }

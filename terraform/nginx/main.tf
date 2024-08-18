@@ -110,6 +110,7 @@ resource "null_resource" "ansible_provision" {
   ]
 
   provisioner "local-exec" {
-    command = "ansible-playbook -i inventory --private-key ansible-key playbook.yml"
+    # command = "ansible-playbook -i inventory --private-key ansible-key playbook.yml"
+    command = "ssh -i ansible-key -o StrictHostKeyChecking=no ansible@34.66.202.16 'echo SSH works'"
   }
 }

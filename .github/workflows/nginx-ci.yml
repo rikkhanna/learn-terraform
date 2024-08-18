@@ -54,7 +54,7 @@ jobs:
     
       - name: change permission for key
         run: chmod 0600 ansible-key
-        
+
       - name: Terraform Apply
         run: terraform apply -auto-approve
 

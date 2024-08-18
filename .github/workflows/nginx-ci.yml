@@ -60,9 +60,13 @@ jobs:
 
       - name: Extract VM ip
         run: |
-          IP=grep -Eo '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' inventory
-          echo "host_ip=${IP}" >> $GITHUB_ENV
-          echo "Extracted IP: ${host_ip}"
+            IP=$(grep -Eo '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' inventory)
+            if [ -z "$IP" ]; then
+                echo "No IP address found in the inventory file."
+                exit 1
+            fi
+            echo "host_ip=${IP}" >> $GITHUB_ENV
+            echo "Extracted IP: ${IP}"
       - name: Copy folder to remote server
         uses: appleboy/scp-action@v0.1.7
         with:

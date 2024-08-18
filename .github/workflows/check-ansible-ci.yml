@@ -1,7 +1,6 @@
 name: 'Test Ansible'
 
-on:
-  workflow_dispatch:
+on: [push]
 
 jobs:
   terraform:
@@ -33,9 +32,14 @@ jobs:
         run: |
             echo "${{ vars.ANSIBLE_KEY_PLAN }}" > ansible-key
             chmod 600 ansible-key
-            ssh-add ansible-key
-    
-      - name: Test SSH Connectivity
-        run: |
-            ssh -i ansible-key -o StrictHostKeyChecking=no ansible@34.66.202.16 'echo SSH works'
+      - name: executing remote ssh commands using key
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+            host: 34.66.202.16
+            key: ansible-key
+            port: 22
+            script: echo SSH works
+    #   - name: Test SSH Connectivity
+    #     run: |
+    #         ssh -i ansible-key -o StrictHostKeyChecking=no ansible@34.66.202.16 'echo SSH works'
     

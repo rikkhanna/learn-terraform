@@ -12,6 +12,16 @@ jobs:
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
+      - name: Copy folder to remote server
+        uses: appleboy/scp-action@v1.0.0
+        with:
+          host: 34.66.202.16
+          username: ansible
+          key: ${{ secrets.ANSIBLE_KEY }}
+          port: 22
+          source: ./terraform/nginx
+          destination: /tmp/nginx
+          recursive: true
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -21,4 +31,4 @@ jobs:
             port: 22
             script: |
               sudo apt-get install -y ansible
-              ansible-playbook -i inventory.tpl --private-key ansible-key playbook.yml
+              ansible-playbook /tmp/nginx/playbook.yml

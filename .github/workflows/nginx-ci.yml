@@ -13,6 +13,8 @@ jobs:
     permissions:
         contents: 'read'
         id-token: 'write'
+    outputs:
+          extracted_ip: ${{ steps.extract_ip.outputs.host_ip }}
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
@@ -58,13 +60,14 @@ jobs:
       - name: Terraform Apply
         run: terraform apply -auto-approve
       - name: Extract VM ip
+        id: extract_ip
         run: |
             IP=$(grep -Eo '[0-9]+\.[0-9]+\.[0-9]+\.[0-9]+' inventory)
             if [ -z "$IP" ]; then
                 echo "No IP address found in the inventory file."
                 exit 1
             fi
-            echo "host_ip=${IP}" >> $GITHUB_ENV
+            echo "host_ip=${IP}" >> $GITHUB_OUTPUT
             echo "Extracted IP: ${IP}"
 
   Ansible:
@@ -80,7 +83,7 @@ jobs:
       - name: Copy folder to remote server
         uses: appleboy/scp-action@v0.1.7
         with:
-            host: ${{ env.host_ip }}
+            host: ${{ needs.terraform.outputs.extracted_ip }}
             username: ansible
             key: ${{ secrets.ANSIBLE_KEY }}
             port: 22
@@ -101,7 +104,7 @@ jobs:
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@v1.0.3
         with:
-              host: ${{ env.host_ip }}
+              host: ${{ needs.terraform.outputs.extracted_ip }}
               username: ansible
               key: ${{ secrets.ANSIBLE_KEY }}
               port: 22

@@ -19,4 +19,7 @@ jobs:
             username: ansible
             key: ${{ secrets.ANSIBLE_KEY }}
             port: 22
-            script: ansible-playbook -i inventory.tpl --private-key ansible-key playbook.yml
+            script: |
+              sudo apt-get update
+              sudo apt-get install -y ansible
+              ansible-playbook -i inventory.tpl --private-key ansible-key playbook.yml

@@ -44,16 +44,16 @@ jobs:
       - name: Terraform Validate
         id: validate
         run: terraform validate -no-color
-      -  name: Write secret to file
-         run: |
-          cat << EOF > ansible-key
-          ${{ vars.ANSIBLE_KEY_PLAN }}
-          EOF
-      - name: Print key
-        run: cat ansible-key
+    #   -  name: Write secret to file
+    #      run: |
+    #       cat << EOF > ansible-key
+    #       ${{ vars.ANSIBLE_KEY_PLAN }}
+    #       EOF
+    #   - name: Print key
+    #     run: cat ansible-key
     
-      - name: change permission for key
-        run: chmod 0600 ansible-key
+    #   - name: change permission for key
+    #     run: chmod 0600 ansible-key
 
       - name: Terraform Apply
         run: terraform apply -auto-approve

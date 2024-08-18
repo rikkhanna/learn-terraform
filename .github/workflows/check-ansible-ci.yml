@@ -6,15 +6,15 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    # defaults:
-    #   run:
-    #     working-directory: ./terraform/nginx
+    defaults:
+      run:
+        working-directory: ./terraform/nginx
     # permissions:
     #     contents: 'read'
     #     id-token: 'write'
     steps:
-    #   - name: Checkout Repo
-    #     uses: actions/checkout@v4
+      - name: Checkout Repo
+        uses: actions/checkout@v4
 
     #   - name: Authenticate with GCP
     #     uses: 'google-github-actions/auth@v2'
@@ -28,11 +28,11 @@ jobs:
     #     uses: google-github-actions/setup-gcloud@v1
     #     with:
     #         skip_install: true
-      - name: Set up SSH Key
-        run: |
-            echo "${{ vars.ANSIBLE_KEY_PLAN }}" > ansible-key
-            chmod 666 ansible-key
-            ls -l
+    #   - name: Set up SSH Key
+    #     run: |
+    #         echo "${{ vars.ANSIBLE_KEY_PLAN }}" > ansible-key
+    #         chmod 666 ansible-key
+    #         ls -l
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@v1.0.3
         with:

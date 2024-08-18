@@ -31,7 +31,7 @@ jobs:
       - name: Set up SSH Key
         run: |
             echo "${{ vars.ANSIBLE_KEY_PLAN }}" > ansible-key
-            chmod 600 ansible-key
+            chmod 666 ansible-key
             ls -l
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@v1.0.3

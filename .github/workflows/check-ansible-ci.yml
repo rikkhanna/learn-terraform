@@ -3,36 +3,15 @@ name: 'Test Ansible'
 on: [push]
 
 jobs:
-  terraform:
-    name: 'Terraform'
+  Ansible-Test:
+    name: 'Ansible-Test'
     runs-on: ubuntu-latest
     defaults:
       run:
         working-directory: ./terraform/nginx
-    # permissions:
-    #     contents: 'read'
-    #     id-token: 'write'
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v4
-
-    #   - name: Authenticate with GCP
-    #     uses: 'google-github-actions/auth@v2'
-    #     with:
-    #         project_id: 'rish-dev'
-    #         token_format: "access_token"
-    #         service_account: 'my-service-account@rish-dev.iam.gserviceaccount.com'
-    #         workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/gitcheck/providers/my-gh-repo'
-    
-    #   - name: Set up Cloud SDK
-    #     uses: google-github-actions/setup-gcloud@v1
-    #     with:
-    #         skip_install: true
-    #   - name: Set up SSH Key
-    #     run: |
-    #         echo "${{ vars.ANSIBLE_KEY_PLAN }}" > ansible-key
-    #         chmod 666 ansible-key
-    #         ls -l
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@v1.0.3
         with:
@@ -40,8 +19,4 @@ jobs:
             username: ansible
             key: ${{ secrets.ANSIBLE_KEY }}
             port: 22
-            script: echo SSH works
-    #   - name: Test SSH Connectivity
-    #     run: |
-    #         ssh -i ansible-key -o StrictHostKeyChecking=no ansible@34.66.202.16 'echo SSH works'
-    
+            script: ansible-playbook -i inventory.tpl --private-key ansible-key playbook.yml

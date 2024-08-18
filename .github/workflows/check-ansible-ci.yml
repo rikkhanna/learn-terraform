@@ -33,6 +33,7 @@ jobs:
         run: |
             echo "${{ vars.ANSIBLE_KEY_PLAN }}" > ansible-key
             chmod 600 ansible-key
+            ssh-add ansible-key
     
       - name: Test SSH Connectivity
         run: |

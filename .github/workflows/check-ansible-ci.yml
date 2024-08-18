@@ -6,28 +6,28 @@ jobs:
   terraform:
     name: 'Terraform'
     runs-on: ubuntu-latest
-    defaults:
-      run:
-        working-directory: ./terraform/nginx
-    permissions:
-        contents: 'read'
-        id-token: 'write'
+    # defaults:
+    #   run:
+    #     working-directory: ./terraform/nginx
+    # permissions:
+    #     contents: 'read'
+    #     id-token: 'write'
     steps:
-      - name: Checkout Repo
-        uses: actions/checkout@v4
+    #   - name: Checkout Repo
+    #     uses: actions/checkout@v4
 
-      - name: Authenticate with GCP
-        uses: 'google-github-actions/auth@v2'
-        with:
-            project_id: 'rish-dev'
-            token_format: "access_token"
-            service_account: 'my-service-account@rish-dev.iam.gserviceaccount.com'
-            workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/gitcheck/providers/my-gh-repo'
+    #   - name: Authenticate with GCP
+    #     uses: 'google-github-actions/auth@v2'
+    #     with:
+    #         project_id: 'rish-dev'
+    #         token_format: "access_token"
+    #         service_account: 'my-service-account@rish-dev.iam.gserviceaccount.com'
+    #         workload_identity_provider: 'projects/636883269497/locations/global/workloadIdentityPools/gitcheck/providers/my-gh-repo'
     
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-        with:
-            skip_install: true
+    #   - name: Set up Cloud SDK
+    #     uses: google-github-actions/setup-gcloud@v1
+    #     with:
+    #         skip_install: true
       - name: Set up SSH Key
         run: |
             echo "${{ vars.ANSIBLE_KEY_PLAN }}" > ansible-key

@@ -69,6 +69,7 @@ jobs:
 
   Ansible:
     name: 'Ansible Test'
+    needs: terraform
     runs-on: ubuntu-latest
     defaults:
       run:

@@ -31,7 +31,7 @@ jobs:
             skip_install: true
       - name: Set up SSH Key
         run: |
-            echo "${{ secrets.SSH_KEY }}" > ansible-key
+            echo "${{ vars.ANSIBLE_KEY_PLAN }}" > ansible-key
             chmod 600 ansible-key
     
       - name: Test SSH Connectivity

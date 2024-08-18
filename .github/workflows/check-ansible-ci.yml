@@ -37,7 +37,8 @@ jobs:
         uses: appleboy/ssh-action@v1.0.3
         with:
             host: 34.66.202.16
-            key: ${{ vars.ANSIBLE_KEY_PLAN }}
+            username: ansible
+            key: ${{ secrets.ANSIBLE_KEY }}
             port: 22
             script: echo SSH works
     #   - name: Test SSH Connectivity

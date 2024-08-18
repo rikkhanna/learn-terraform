@@ -21,7 +21,6 @@ jobs:
           port: 22
           source: ./terraform/nginx
           destination: /tmp/nginx
-          recursive: true
       - name: executing remote ssh commands using key
         uses: appleboy/ssh-action@v1.0.3
         with:

@@ -1,6 +1,6 @@
 ---
 - name: Install nginx
-  hosts: all
+  hosts: localhost
   remote_user: ubuntu
   become: true
   roles:

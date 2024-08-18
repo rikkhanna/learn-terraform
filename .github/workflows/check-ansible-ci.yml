@@ -41,6 +41,6 @@ jobs:
             key: ${{ secrets.ANSIBLE_KEY }}
             port: 22
             script: |
-              ls -la /tmp/nginx/terraform/nginx
+              cd /tmp/nginx/terraform/nginx
               sudo apt-get install -y ansible
-              ansible-playbook /tmp/nginx/terraform/nginx/playbook.yml
+              ansible-playbook playbook.yml
